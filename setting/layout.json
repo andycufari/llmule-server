@@ -1,0 +1,42 @@
+{
+  "mule": {
+    "components": [
+      {
+        "component": "div",
+        "attributes": {
+          "className": "mule-desktop"
+        },
+        "components": [
+          {
+            "component": "div",
+            "attributes": {
+              "className": "mule-win"
+            },
+            "components": [
+              {
+                "component": "./MuleChrome"
+              },
+              {
+                "component": "main",
+                "attributes": {
+                  "className": "mule-body"
+                },
+                "components": [
+                  {
+                    "component": "@@PageComponents@@"
+                  }
+                ]
+              },
+              {
+                "component": "./MuleStatus"
+              }
+            ]
+          },
+          {
+            "component": "./MuleLogin"
+          }
+        ]
+      }
+    ]
+  }
+}

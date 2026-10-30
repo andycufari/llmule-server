@@ -1,0 +1,12 @@
+{
+  "layout": "mule",
+  "meta": {
+    "title": "My Key \u2014 LLMule",
+    "robots": "noindex"
+  },
+  "components": [
+    {
+      "component": "./MuleDashboard"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "routes": {
+    "muleModels": {
+      "public": true,
+      "origins": [
+        "*"
+      ]
+    },
+    "muleChat": {
+      "public": true,
+      "origins": [
+        "*"
+      ]
+    },
+    "muleProviderPoll": {
+      "public": true
+    },
+    "muleProviderResult": {
+      "public": true
+    },
+    "muleAdmin": {
+      "public": true,
+      "keys": [
+        "[[env.MULE_ADMIN_KEY]]"
+      ]
+    },
+    "muleMe": {
+      "public": true
+    },
+    "muleNetwork": {
+      "public": true,
+      "origins": [
+        "*"
+      ]
+    }
+  }
+}

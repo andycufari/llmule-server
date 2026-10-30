@@ -1,0 +1,10 @@
+{
+  "layout": "mule",
+  "meta": {
+    "title": "LLMule — the parallel network of LLMs",
+    "description": "Hobbyists share the models running on their own GPUs. Anyone can use them for free through an OpenAI-compatible API. Experimental, run by people, built on trust."
+  },
+  "components": [
+    { "component": "./MuleHome" }
+  ]
+}

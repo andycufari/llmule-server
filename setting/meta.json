@@ -1,0 +1,79 @@
+{
+  "title": {
+    "en": "LLMule — the parallel network of LLMs",
+    "es": "LLMule — la red paralela de LLMs"
+  },
+  "description": {
+    "en": "Hobbyists share the models running on their own GPUs. Anyone can use them for free through an OpenAI-compatible API. Experimental, run by people, built on trust.",
+    "es": "Aficionados comparten los modelos que corren en sus GPUs. Cualquiera los usa gratis con una API compatible con OpenAI. Experimental, hecho por personas, basado en la confianza."
+  },
+  "ogopengraph": [
+    {
+      "property": "og:title",
+      "content": {
+        "en": "LLMule — the parallel network of LLMs",
+        "es": "LLMule — la red paralela de LLMs"
+      }
+    },
+    {
+      "property": "og:description",
+      "content": {
+        "en": "Hobbyists share the models running on their own GPUs. Anyone can use them for free through an OpenAI-compatible API. Experimental, run by people, built on trust.",
+        "es": "Aficionados comparten los modelos que corren en sus GPUs. Cualquiera los usa gratis con una API compatible con OpenAI. Experimental, hecho por personas, basado en la confianza."
+      }
+    },
+    {
+      "property": "og:url",
+      "content": "https://llmule.xyz"
+    },
+    {
+      "property": "og:type",
+      "content": "website"
+    },
+    {
+      "property": "og:site_name",
+      "content": "LLMule"
+    }
+  ],
+  "lang": "en",
+  "favIcon": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>@font-face{font-family:'Courier';src:local('Courier New');}</style><text x='50%' y='50%' font-size='80' font-family='Courier' text-anchor='middle' dominant-baseline='middle' fill='%2361afef'>⊞</text></svg>",
+  "robots": "index, follow",
+  "keywords": [
+    "LLM",
+    "P2P",
+    "local AI",
+    "Ollama",
+    "LM Studio",
+    "llama.cpp",
+    "vLLM",
+    "OpenAI-compatible API",
+    "free LLM API",
+    "share GPU",
+    "open models"
+  ],
+  "twitter": {
+    "card": "summary_large_image",
+    "site": "@llmule_ai",
+    "creator": "@andrescm64",
+    "title": "LLMule: Decentralized P2P Network for AI Computing",
+    "description": "Share your computational resources and join the revolution of distributed AI"
+  },
+  "additionalMeta": [
+    {
+      "name": "theme-color",
+      "content": "#1a1b26"
+    },
+    {
+      "name": "application-name",
+      "content": "LLMule"
+    },
+    {
+      "name": "apple-mobile-web-app-title",
+      "content": "LLMule"
+    },
+    {
+      "name": "msapplication-TileColor",
+      "content": "#1a1b26"
+    }
+  ]
+}

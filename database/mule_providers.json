@@ -1,0 +1,24 @@
+{
+  "id": "mule_providers",
+  "name": "LLMule — Providers",
+  "description": "One row per running provider process (instance). lastSeenMs is refreshed while it polls; online = seen in the last 30s.",
+  "type": "jason",
+  "schema": {
+    "userId":     { "type": "string", "required": true },
+    "instance":   { "type": "string", "required": true, "description": "Random id the provider process picks at start" },
+    "name":       { "type": "string" },
+    "models":     { "type": "array" },
+    "lastSeenMs": { "type": "number" },
+    "served":     { "type": "number", "default": 0 }
+  },
+  "indexes": [
+    { "name": "instance_unique", "fields": { "instance": 1 }, "settings": { "unique": true } },
+    { "name": "last_seen", "fields": { "lastSeenMs": -1 } }
+  ],
+  "security": {
+    "read": "admin",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

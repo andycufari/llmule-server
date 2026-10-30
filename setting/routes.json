@@ -1,0 +1,6 @@
+{
+  "v1/models": { "function": "muleModels" },
+  "v1/chat/completions": { "function": "muleChat" },
+  "provider/poll": { "function": "muleProviderPoll" },
+  "provider/result": { "function": "muleProviderResult" }
+}

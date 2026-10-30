@@ -1,0 +1,30 @@
+{
+  "id": "mule_jobs",
+  "name": "LLMule — Jobs",
+  "description": "The P2P table: a chat completion waiting for (or answered by) a provider. The provider is assigned when the job is created, so two providers never race for it.",
+  "type": "jason",
+  "schema": {
+    "userId":         { "type": "string", "required": true, "description": "Consumer" },
+    "providerId":     { "type": "string", "description": "mule_providers row" },
+    "providerUserId": { "type": "string" },
+    "runningBy":      { "type": "string", "description": "Instance that picked it up. Only the provider writes it; only it can post the result" },
+    "model":          { "type": "string" },
+    "request":        { "type": "string", "description": "JSON of the OpenAI request body" },
+    "result":         { "type": "string", "description": "JSON of the OpenAI response" },
+    "error":          { "type": "string" },
+    "status":         { "type": "string", "description": "queued | running | done | error | expired" },
+    "createdMs":      { "type": "number" },
+    "startedMs":      { "type": "number" },
+    "finishedMs":     { "type": "number" }
+  },
+  "indexes": [
+    { "name": "provider_status", "fields": { "providerId": 1, "status": 1, "createdMs": 1 } },
+    { "name": "status", "fields": { "status": 1 } }
+  ],
+  "security": {
+    "read": "admin",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "mule_users",
+  "name": "LLMule — Users",
+  "description": "One row per API key. Consumers and providers are the same users. Imported from the old server (2026-10-29 mongodump) keeping their llm_ keys. Web users (app.auth email login) get their row on first visit to the dashboard; old users find theirs by email.",
+  "type": "jason",
+  "schema": {
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "apiKey": {
+      "type": "string",
+      "required": true,
+      "description": "llm_ + 64 hex. Plain text, like the old server"
+    },
+    "status": {
+      "type": "string",
+      "default": "active",
+      "description": "active | blocked"
+    },
+    "legacyId": {
+      "type": "string",
+      "description": "_id in the old Mongo"
+    },
+    "uses": {
+      "type": "number",
+      "default": 0,
+      "description": "Completions consumed"
+    },
+    "served": {
+      "type": "number",
+      "default": 0,
+      "description": "Completions served as provider"
+    },
+    "lastUsedMs": {
+      "type": "number"
+    },
+    "nick": {
+      "type": "string",
+      "description": "Public, unique, [a-z0-9_-]{3,20}. Shows on the leaderboard and in nick/model"
+    },
+    "dayKey": {
+      "type": "string",
+      "description": "YYYY-MM-DD (UTC) of dayCount"
+    },
+    "dayCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Completions today — daily limit"
+    },
+    "createdMs": {
+      "type": "number"
+    }
+  },
+  "indexes": [
+    {
+      "name": "api_key_unique",
+      "fields": {
+        "apiKey": 1
+      },
+      "settings": {
+        "unique": true
+      }
+    },
+    {
+      "name": "email",
+      "fields": {
+        "email": 1
+      }
+    },
+    {
+      "name": "nick",
+      "fields": {
+        "nick": 1
+      }
+    }
+  ],
+  "security": {
+    "read": "admin",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "layout": "mule",
+  "meta": {
+    "title": "Docs — LLMule",
+    "description": "Use LLMule from any OpenAI client, pick a model, know the limits, and share your own GPU safely."
+  },
+  "components": [{ "component": "./MuleDocs" }]
+}

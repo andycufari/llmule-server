@@ -1,0 +1,12 @@
+{
+  "layout": "mule",
+  "meta": {
+    "title": "Chat \u2014 LLMule",
+    "description": "Chat with open models shared by volunteers on the LLMule network."
+  },
+  "components": [
+    {
+      "component": "./MuleChatRoom"
+    }
+  ]
+}
