@@ -1,6 +1,8 @@
+<p align="center"><a href="https://llmule.xyz"><img src="assets/llmule-wordmark.png" alt="LLMule" width="460"></a></p>
+
 # LLMule server
 
-The server and website behind **[llmule.xyz](https://llmule.xyz)** — the parallel network of LLMs. People with a
+The server and website behind **[llmule.xyz](https://llmule.xyz)** — the underground P2P network of LLMs. People with a
 GPU share the models running on their own machines; people without one use them for free through an
 OpenAI-compatible API.
 
