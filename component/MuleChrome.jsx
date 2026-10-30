@@ -91,11 +91,8 @@ const MuleChrome = ({ jcontext }) => {
       <style>{MULE_CSS}</style>
       <div className="mule-title">
         <span className="t">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-            <rect width="16" height="16" fill="#fff" />
-            <path d="M3 13V6l2-3 1 3h4l1-3 2 3v7h-3V9H6v4z" fill="#0a246a" />
-          </svg>
-          LLMule v2 — the parallel network of LLMs
+          <img src="https://cm64-ss-public.s3.amazonaws.com/67608172a31516c083602958/llmule-head-64.png" width="18" height="18" alt="" aria-hidden="true" style={{ display: 'block' }} />
+          LLMule v2 — the underground P2P network of LLMs
         </span>
         <span className="caps" aria-hidden="true"><span>_</span><span>□</span><span>×</span></span>
       </div>

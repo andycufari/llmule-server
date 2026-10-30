@@ -23,19 +23,21 @@ const MuleHome = ({ jcontext }) => {
 
   return (
     <div>
-      <div className="mule-white" style={{ padding: '18px 18px 14px' }}>
+      <div className="mule-white mule-hero" style={{ padding: '18px 18px 14px', display: 'flex', gap: 16, alignItems: 'center' }}>
+        <style>{`@media (max-width: 760px) { .mule-hero-mule { width: 96px !important; height: 96px !important; } }`}</style>
+        <div style={{ flex: 1, minWidth: 0 }}>
         <span className="mule-tag">EXPERIMENTAL · RUN BY HOBBYISTS</span>
-        <h1 className="mule-h1" style={{ marginTop: 10 }}>The parallel network of LLMs.</h1>
+        <h1 className="mule-h1" style={{ marginTop: 10 }}>The underground P2P network of LLMs.</h1>
         <p className="mule-p" style={{ fontSize: 15, maxWidth: 720 }}>
-          People with a GPU share the models running on their own machines.
-          People without one use them — free, through the same API as OpenAI.
-          Like the P2P networks we grew up with, but for language models.
+          People with GPUs share the models running on their machines with other local AI enthusiasts.
         </p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
           <a className="mule-btn primary" href="/dashboard">Get your free API key</a>
           <a className="mule-btn" href="/chat">Chat in the browser</a>
           <a className="mule-btn" href="/docs#share">Share your GPU</a>
         </div>
+        </div>
+        <img className="mule-hero-mule" src="https://cm64-ss-public.s3.amazonaws.com/67608172a31516c083602958/llmule-body-512.png" width="190" height="190" alt="The LLMule mule, carrying servers" style={{ flexShrink: 0 }} />
       </div>
 
       <div className="mule-grid3">
