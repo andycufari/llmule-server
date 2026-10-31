@@ -16,8 +16,8 @@ const CARD_CSS = `
 .mule-card-md ol { list-style: decimal; padding-left: 22px; margin: 6px 0; }
 .mule-card-md h1, .mule-card-md h2, .mule-card-md h3 { font-weight: bold; color: #0a246a; margin: 12px 0 4px; font-size: 14px; }
 .mule-card-md code { font-family: "Lucida Console", monospace; font-size: 12px; background: #eee; padding: 0 3px; }
-.mule-card-md pre { background: #000 !important; color: #c0c0c0; padding: 8px 10px; overflow-x: auto; }
-.mule-card-md pre code { background: none; color: #c0c0c0; }
+.mule-card-md pre { background: #f6f5f1 !important; color: #1a1a1a; padding: 8px 10px; overflow-x: auto; border: 1px solid #808080; }
+.mule-card-md pre code { background: none; color: #1a1a1a; }
 .mule-card-md a { color: #0000ee !important; text-decoration: underline; }
 .mule-card-md blockquote { border-left: 3px solid #808080; padding-left: 8px; color: #404040; }
 .mule-card-md table { border-collapse: collapse; } .mule-card-md th, .mule-card-md td { border: 1px solid #808080; padding: 2px 6px; }
@@ -28,11 +28,13 @@ const CARD_CSS = `
 .mule-facts .k { font-size: 11px; color: #505050; }
 .mule-facts .v { font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (max-width: 760px) { .mule-facts { grid-template-columns: 1fr 1fr; } .mule-facts > div { border-bottom: 1px dotted #c0c0c0; } }
-.mule-tabs { display: flex; gap: 2px; margin-top: 10px; padding-left: 4px; position: relative; z-index: 1; }
-.mule-tab { padding: 4px 14px 3px; background: #d4d0c8; border: 2px solid; border-color: #fff #404040 transparent #fff;
-  border-bottom: 0; font: inherit; cursor: pointer; color: #000; position: relative; top: 2px; }
-.mule-tab.on { font-weight: bold; padding-bottom: 6px; top: 0; background: #d4d0c8; }
-.mule-tabpane { border: 2px solid; border-color: #fff #404040 #404040 #fff; padding: 10px; background: #d4d0c8; }
+/* Classic tabs: inactive ones sit lower, behind the panel's top edge; the active one is taller, overlaps that
+   edge by 2px and blends into the panel */
+.mule-tabs { display: flex; align-items: flex-end; margin-top: 10px; padding-left: 4px; position: relative; z-index: 2; }
+.mule-tab { padding: 3px 12px; background: #d4d0c8; border: 2px solid; border-color: #fff #404040 transparent #fff;
+  border-bottom: 0; border-radius: 3px 3px 0 0; font: inherit; cursor: pointer; color: #000; position: relative; }
+.mule-tab.on { font-weight: bold; padding: 5px 14px 6px; margin: 0 -2px -2px; z-index: 3; }
+.mule-tabpane { position: relative; z-index: 1; border: 2px solid; border-color: #fff #404040 #404040 #fff; padding: 10px; background: #d4d0c8; }
 .mule-comment { padding: 8px 0; border-bottom: 1px dotted #c0c0c0; }
 .mule-comment:last-child { border-bottom: 0; }
 `;

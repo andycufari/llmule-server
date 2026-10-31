@@ -46,10 +46,10 @@ body { background: #3a6ea5 !important; }
 .mule-btn.primary { font-weight: bold; outline: 1px solid #000; outline-offset: -4px; }
 .mule-btn:disabled { color: #808080 !important; cursor: default; }
 .mule-input { font: inherit; padding: 3px 5px; background: #fff; border: 2px solid; border-color: #808080 #fff #fff #808080; color: #000; }
-.mule-code { display: block; background: #000; color: #c0c0c0; font-family: "Lucida Console", "Courier New", monospace;
+.mule-code { display: block; background: #fff; color: #1a1a1a; font-family: "Lucida Console", "Courier New", monospace;
   font-size: 12px; padding: 10px 12px; white-space: pre; overflow-x: auto; border: 2px solid; border-color: #808080 #fff #fff #808080; }
-.mule-code .c { color: #6a9955; }
-.mule-code .y { color: #ffd75f; }
+.mule-code .c { color: #008000; }
+.mule-code .y { color: #000080; font-weight: bold; }
 .mule-h1 { font-family: Verdana, Tahoma, sans-serif; font-size: 26px; font-weight: bold; color: #0a246a; margin: 0 0 6px; letter-spacing: -0.5px; }
 .mule-h2 { font-family: Verdana, Tahoma, sans-serif; font-size: 16px; font-weight: bold; color: #0a246a; margin: 18px 0 6px; }
 .mule-p { margin: 6px 0; line-height: 1.5; }

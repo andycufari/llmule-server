@@ -16,9 +16,9 @@ const MD_CSS = `
 .mule-md h1, .mule-md h2, .mule-md h3, .mule-md h4 { font-weight: bold; color: #0a246a; margin: 10px 0 4px; font-size: 14px; }
 .mule-md h1 { font-size: 17px; } .mule-md h2 { font-size: 15px; }
 .mule-md code { font-family: "Lucida Console", "Courier New", monospace; font-size: 12px; background: #eeeeee; padding: 0 3px; color: #000; }
-.mule-md pre { background: #000 !important; color: #c0c0c0; padding: 8px 10px; overflow-x: auto; margin: 6px 0;
-  border: 2px solid; border-color: #808080 #fff #fff #808080; }
-.mule-md pre code { background: none; color: #c0c0c0; padding: 0; }
+.mule-md pre { background: #f6f5f1 !important; color: #1a1a1a; padding: 8px 10px; overflow-x: auto; margin: 6px 0;
+  border: 1px solid #808080; }
+.mule-md pre code { background: none; color: #1a1a1a; padding: 0; }
 .mule-md .markdown-code-block { position: relative; }
 .mule-md .markdown-code-language { position: absolute; top: 2px; right: 6px; font-size: 10px; color: #808080; }
 .mule-md a { color: #0000ee !important; text-decoration: underline; }
