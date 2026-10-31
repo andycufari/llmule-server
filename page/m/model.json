@@ -1,8 +1,27 @@
 {
   "layout": "mule",
+  "fetch_data": {
+    "database": "mule_pages",
+    "query": {
+      "nick": "{{params.nick}}",
+      "model": "{{params.model}}"
+    },
+    "findOne": true
+  },
   "meta": {
-    "title": "{{params.nick}}/{{params.model}} — LLMule",
-    "description": "{{params.model}}, shared by {{params.nick}} on LLMule — try it in the browser, or call it from any OpenAI-compatible app."
+    "title": "{{params.nick}}/{{params.model}} on LLMule",
+    "description": "An open model shared on LLMule, the underground P2P network of LLMs. Try it in the browser, or call it from any OpenAI-compatible app."
+  },
+  "sitemap": {
+    "dynamic": true,
+    "urlPattern": "/m/:nick/:model",
+    "query": {
+      "params": {
+        ":nick": "nick",
+        ":model": "model"
+      }
+    },
+    "overrideQuery": {}
   },
   "components": [
     {

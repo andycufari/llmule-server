@@ -1,0 +1,22 @@
+{
+  "id": "mule_pages",
+  "name": "LLMule — Public model pages",
+  "description": "Public index of written model cards (title/description set), for SEO: the /m/nick/model page reads it server-side for <title> and meta, and the sitemap lists one URL per row. Only public facts — no ids, no likes. Written by muleCard (save, and lazily on read).",
+  "type": "jason",
+  "schema": {
+    "nick":      { "type": "string", "required": true },
+    "model":     { "type": "string", "required": true },
+    "title":     { "type": "string", "description": "Full SEO title: \"<card title> — nick/model on LLMule\"" },
+    "summary":   { "type": "string", "description": "Plain text, ≤160 chars, from the description: the meta description" },
+    "updatedMs": { "type": "number" }
+  },
+  "indexes": [
+    { "name": "page_unique", "fields": { "nick": 1, "model": 1 }, "settings": { "unique": true } }
+  ],
+  "security": {
+    "read": "public",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

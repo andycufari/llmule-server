@@ -84,6 +84,36 @@ var view = function(nick, model, card, where, me) {
   };
 };
 
+// Public SEO index (mule_pages): one row per WRITTEN card, only public facts. The page's <title>/meta (via
+// fetch_data: the framework takes the record's title/summary) and the sitemap read it. Best effort: a card never fails because of it.
+var summaryOf = function(md) {
+  var t = String(md || '').replace(/```[\s\S]*?```/g, ' ').replace(/^#+\s.*$/gm, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[#>*_`]/g, '').replace(/\s+/g, ' ').trim();
+  return t.length > 160 ? t.slice(0, 157).replace(/\s+\S*$/, '') + '…' : t;
+};
+
+var syncPage = async function(app, nick, model, card) {
+  try {
+    var pages = app.db.use('mule_pages', true);
+    var row = plain(await pages.query({ nick: nick, model: model }).first());
+    var written = !!(card && (card.title || card.description));
+    if (!written) {
+      if (row) await pages.deleteById(idOf(row));
+      return;
+    }
+    // The framework uses this row's title/summary as the page's <title> and meta description as they are
+    var want = {
+      title: (card.title || model) + ' — ' + nick + '/' + model + ' on LLMule',
+      summary: summaryOf(card.description) || ('An open model shared by ' + nick + ' on LLMule. Try it in the browser, or call it from any OpenAI-compatible app.'),
+      updatedMs: card.updatedMs || Date.now()
+    };
+    if (!row) await pages.add(Object.assign({ nick: nick, model: model }, want));
+    else if (row.title !== want.title || row.summary !== want.summary) await pages.update(idOf(row), want);
+  } catch (e) {
+    // SEO index is best effort
+  }
+};
+
 async function muleCard(app) {
   if (app.method !== 'POST') return fail(app, 405, 'Use POST');
   var p = app.params || {};
@@ -106,6 +136,7 @@ async function muleCard(app) {
     } else {
       row = plain(await cards.add(Object.assign({ ownerId: idOf(me), model: model, title: '', description: '', hardware: '', answered: 0, tokSum: 0, msSum: 0, likes: [], likeCount: 0, createdMs: Date.now() }, fields)));
     }
+    await syncPage(app, me.nick, model, row);
     return json(app, view(me.nick, model, row, await presence(app, idOf(me), model), me));
   }
 
@@ -151,5 +182,7 @@ async function muleCard(app) {
     return json(app, view(nick, name, card, where, liker));
   }
 
+  // Cards written before mule_pages existed (or after a nick change) get their public row here
+  if (card && (card.title || card.description)) await syncPage(app, nick, name, card);
   return json(app, view(nick, name, card, where, await sessionUser(app, false)));
 }

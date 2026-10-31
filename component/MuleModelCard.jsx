@@ -2,11 +2,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ThumbsUp, Copy, Pencil, Link2, Trash } from 'lucide-react';
-import CardMarkdown from '@/components/framework/utils/MarkdownView';
+import MarkdownView from '@/components/framework/utils/MarkdownView';
 import MuleChatRoom from './MuleChatRoom';
-// ./MuleChatRoom is inlined into this file by the bundler: no top-level name here may repeat one of its
+// ./MuleChatRoom is inlined into this file by the bundler: imports are merged (one per path, the FIRST name wins — keep the same names), own top-level consts must not repeat
 
-// Written by a stranger: CardMarkdown (MarkdownView) sanitizes HTML, and images become links (an <img> would leak the reader's IP)
+// Written by a stranger: MarkdownView sanitizes HTML, and images become links (an <img> would leak the reader's IP)
 const cardSafeMarkdown = (text) => String(text || '').replace(/!\[/g, '[');
 
 const CARD_CSS = `
@@ -273,7 +273,7 @@ const MuleModelCard = (props) => {
                 <span className="legend">About this model</span>
                 {card.description ? (
                   <div className="mule-card-md" style={{ wordBreak: 'break-word' }}>
-                    <CardMarkdown content={cardSafeMarkdown(card.description)} prose={false} codeHighlight="basic" />
+                    <MarkdownView content={cardSafeMarkdown(card.description)} prose={false} codeHighlight="basic" />
                   </div>
                 ) : (
                   <p className="mule-p mule-muted" style={{ marginTop: 0 }}>
