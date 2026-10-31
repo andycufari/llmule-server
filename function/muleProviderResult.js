@@ -27,6 +27,30 @@ var whoIs = async function(app) {
   return await app.db.use('mule_users', true).query({ apiKey: key, status: 'active' }).first();
 };
 
+// The model card (nick/model page) shows what the network measured: answers and tok/s on the owner's machine.
+// Time = picked up → answered, so it includes the hop to llmule.xyz (it's "about", not a benchmark).
+// Never fails the result: the consumer is waiting.
+var countOnCard = async function(app, job, response) {
+  try {
+    var cards = app.db.use('mule_cards', true);
+    var card = plain(await cards.query({ ownerId: job.providerUserId, model: job.model }).first());
+    if (!card) {
+      card = plain(await cards.add({ ownerId: job.providerUserId, model: job.model, title: '', description: '', hardware: '', answered: 0, tokSum: 0, msSum: 0, likes: [], likeCount: 0, createdMs: Date.now() }));
+    }
+    var tok = response && response.usage && typeof response.usage.completion_tokens === 'number' ? response.usage.completion_tokens : 0;
+    var ms = job.startedMs ? Date.now() - job.startedMs : 0;
+    var upd = { answered: (card.answered || 0) + 1 };
+    // Short answers measure the round trip, not the GPU: only 32+ tokens count for speed
+    if (tok >= 32 && ms > 0 && ms < 120000) {
+      upd.tokSum = (card.tokSum || 0) + tok;
+      upd.msSum = (card.msSum || 0) + ms;
+    }
+    await cards.update(idOf(card), upd);
+  } catch (e) {
+    // stats are best effort
+  }
+};
+
 async function muleProviderResult(app) {
   if (app.method !== 'POST') return fail(app, 405, 'Use POST');
   var user = await whoIs(app);
@@ -60,5 +84,6 @@ async function muleProviderResult(app) {
   }
   var provider = await app.db.use('mule_providers', true).query({ instance: p.instance }).first();
   if (provider) await app.db.use('mule_providers', true).update(idOf(provider), { served: (provider.served || 0) + 1 });
+  await countOnCard(app, job, p.response);
   return json(app, { ok: true });
 }

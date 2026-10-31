@@ -29,9 +29,11 @@ const MD_CSS = `
 .mule-md strong { font-weight: bold; } .mule-md em { font-style: italic; }
 `;
 
-const MuleChatRoom = ({ jcontext }) => {
+const MuleChatRoom = (props) => {
+  // On a model page (/m/nick/model) the chat talks to that model only
+  const lock = typeof props.lock === 'string' && props.lock.indexOf('{{') === -1 ? props.lock : '';
   const [models, setModels] = useState([]);
-  const [model, setModel] = useState('auto');
+  const [model, setModel] = useState(lock || 'auto');
   const [msgs, setMsgs] = useState([]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
@@ -40,7 +42,7 @@ const MuleChatRoom = ({ jcontext }) => {
   const endRef = useRef(null);
 
   useEffect(() => {
-    fetch('/api/muleNetwork').then((r) => r.json()).then((d) => setModels(d.models || [])).catch(() => {});
+    if (!lock) fetch('/api/muleNetwork').then((r) => r.json()).then((d) => setModels(d.models || [])).catch(() => {});
     // First visit straight to the chat: this creates the LLMule account for the logged-in email
     fetch('/api/muleMe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
       .then((r) => { if (r.status === 401) setGuest(true); })
@@ -101,19 +103,25 @@ const MuleChatRoom = ({ jcontext }) => {
   return (
     <div>
       <style>{MD_CSS}</style>
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
-        <label htmlFor="mule-model">Model:</label>
-        <select id="mule-model" className="mule-input" value={model} onChange={(e) => setModel(e.target.value)}>
-          <option value="auto">auto — the most shared</option>
-          {models.map((m) => (
-            <option key={m.id} value={m.id}>{m.id} ({m.providers} source{m.providers === 1 ? '' : 's'})</option>
-          ))}
-        </select>
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8, marginTop: lock ? 14 : 0 }}>
+        {lock ? (
+          <b>Try it: <code>{lock}</code></b>
+        ) : (
+          <>
+            <label htmlFor="mule-model">Model:</label>
+            <select id="mule-model" className="mule-input" value={model} onChange={(e) => setModel(e.target.value)}>
+              <option value="auto">auto — the most shared</option>
+              {models.map((m) => (
+                <option key={m.id} value={m.id}>{m.id} ({m.providers} source{m.providers === 1 ? '' : 's'})</option>
+              ))}
+            </select>
+          </>
+        )}
         <span style={{ flex: 1 }} />
         <button className="mule-btn" onClick={() => setMsgs([])} disabled={busy || !msgs.length}><Trash2 size={13} /> Clear</button>
       </div>
 
-      <div className="mule-white" style={{ height: '56vh', minHeight: 280, overflowY: 'auto', padding: 10 }}>
+      <div className="mule-white" style={{ height: lock ? '44vh' : '56vh', minHeight: 280, overflowY: 'auto', padding: 10 }}>
         {msgs.length === 0 && (
           <div className="mule-muted" style={{ textAlign: 'center', marginTop: '18vh' }}>
             <p className="mule-p">Say something. A volunteer's machine will answer.</p>

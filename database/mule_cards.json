@@ -1,0 +1,30 @@
+{
+  "id": "mule_cards",
+  "name": "LLMule — Model cards",
+  "description": "One row per nick/model: what the person who shares it says about it (title, description, hardware) plus what the network measured (answers, tokens, time → tok/s) and the likes. The card outlives the provider process: an offline model keeps its page. Stats rows are created on the first answer; title/description stay empty until the owner writes them.",
+  "type": "jason",
+  "schema": {
+    "ownerId":     { "type": "string", "required": true, "description": "mule_users row of whoever shares it" },
+    "model":       { "type": "string", "required": true, "description": "Public model name, as the provider announces it" },
+    "title":       { "type": "string", "default": "" },
+    "description": { "type": "string", "default": "", "description": "Markdown, written by the owner. Rendered sanitized, images as links" },
+    "hardware":    { "type": "string", "default": "" },
+    "answered":    { "type": "number", "default": 0 },
+    "tokSum":      { "type": "number", "default": 0, "description": "completion_tokens of answers with a measured time" },
+    "msSum":       { "type": "number", "default": 0, "description": "startedMs→finishedMs of those answers" },
+    "likes":       { "type": "array", "description": "mule_users ids" },
+    "likeCount":   { "type": "number", "default": 0 },
+    "createdMs":   { "type": "number" },
+    "updatedMs":   { "type": "number" }
+  },
+  "indexes": [
+    { "name": "owner_model_unique", "fields": { "ownerId": 1, "model": 1 }, "settings": { "unique": true } },
+    { "name": "likes", "fields": { "likeCount": -1 } }
+  ],
+  "security": {
+    "read": "admin",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

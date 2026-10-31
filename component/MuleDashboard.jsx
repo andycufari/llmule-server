@@ -39,9 +39,26 @@ const MuleDashboard = ({ jcontext }) => {
   const [nick, setNick] = useState('');
   const [busy, setBusy] = useState(false);
   const [tab, setTab] = useState('python');
+  const [mine, setMine] = useState(null);
+  const [newModel, setNewModel] = useState('');
+
+  const loadMine = () => fetch('/api/muleCard', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"op":"mine"}' })
+    .then((r) => r.json()).then((d) => setMine(d.models || [])).catch(() => setMine([]));
+  const cardHref = (m) => '/m/' + encodeURIComponent(acct.nick) + '/' + encodeURIComponent(m);
+
+  const addCard = async () => {
+    const m = newModel.trim();
+    if (!m) return;
+    setBusy(true);
+    const r = await fetch('/api/muleCard', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ op: 'save', model: m }) });
+    const d = await r.json().catch(() => ({}));
+    setBusy(false);
+    if (!r.ok) { app.ui.toast((d.error && d.error.message) || 'Error ' + r.status, { type: 'error' }); return; }
+    window.location.href = cardHref(m);
+  };
 
   useEffect(() => {
-    me().then((d) => { setAcct(d); setNick(d.nick || ''); }).catch((e) => {
+    me().then((d) => { setAcct(d); setNick(d.nick || ''); loadMine(); }).catch((e) => {
       if (e.status === 401) {
         setGuest(true);
         app.events.emit('mule:connect');
@@ -184,6 +201,42 @@ Model:     auto`,
         <div style={{ marginTop: 6 }}>
           <button className="mule-btn" onClick={() => copy(realSnippet(tab), 'Snippet')}><Copy size={13} /> Copy with my key</button>
         </div>
+      </div>
+
+      <div className="mule-box">
+        <span className="legend">Your models</span>
+        <p className="mule-p" style={{ marginTop: 0 }}>
+          Each model you share gets a page — <code>llmule.xyz/m/{acct.nick || 'nick'}/model</code> — with your description, a chat to try it and 👍s.
+          Trained or fine-tuned something weird? That page is the link to post.
+        </p>
+        {!acct.nick && <p className="mule-p"><b>Pick a nick above first</b> — your pages live under it.</p>}
+        {acct.nick && mine && mine.length > 0 && (
+          <div className="mule-listwrap" style={{ marginBottom: 8 }}>
+            <table className="mule-list">
+              <thead><tr><th>Model</th><th>Card</th><th>Status</th><th>👍</th><th>Served</th><th></th></tr></thead>
+              <tbody>
+                {mine.map((m) => (
+                  <tr key={m.model}>
+                    <td><b>{m.title || m.model}</b>{m.title && <span className="mule-muted"> — <code>{m.model}</code></span>}</td>
+                    <td>{m.written ? 'written' : <span className="mule-muted">empty</span>}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}><span className="mule-dot" style={{ background: m.online ? '#2e7d32' : '#9e9e9e' }} />{m.online ? 'online' : 'offline'}</td>
+                    <td>{m.likes}</td>
+                    <td>{m.answered}</td>
+                    <td><a className="mule-a" href={cardHref(m.model)}>{m.written ? 'Open' : 'Write it'}</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {acct.nick && mine && mine.length === 0 && <p className="mule-p mule-muted">Nothing shared yet. Start the provider (below), or write the card first:</p>}
+        {acct.nick && (
+          <div style={{ display: 'flex', gap: 4 }}>
+            <input className="mule-input" value={newModel} maxLength={120} placeholder="model name, exactly as your provider shares it"
+              onChange={(e) => setNewModel(e.target.value.replace(/[\s/]/g, ''))} style={{ flex: 1, minWidth: 0 }} />
+            <button className="mule-btn" onClick={addCard} disabled={busy || !newModel.trim()}>New card</button>
+          </div>
+        )}
       </div>
 
       <div className="mule-box">

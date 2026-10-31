@@ -19,6 +19,10 @@ const MuleHome = ({ jcontext }) => {
   }, []);
 
   const models = (net && net.models) || [];
+  const cards = (net && net.cards) || [];
+  // Online models from sharers without a nick have no page
+  const anon = models.filter((m) => !m.by.length);
+  const cardHref = (c) => '/m/' + encodeURIComponent(c.nick) + '/' + encodeURIComponent(c.model);
   const top = ((net && net.leaderboard) || []).slice(0, 8);
 
   return (
@@ -56,30 +60,43 @@ const MuleHome = ({ jcontext }) => {
       </div>
 
       <div className="mule-box" id="network">
-        <span className="legend">Network — shared right now</span>
+        <span className="legend">Network — models people share</span>
         <div className="mule-listwrap">
           <table className="mule-list">
             <thead>
-              <tr><th style={{ width: '45%' }}>Model</th><th>Sources</th><th>Shared by</th><th>Use it as</th></tr>
+              <tr><th style={{ width: '46%' }}>Model</th><th>Shared by</th><th>Status</th><th>👍</th><th>Speed</th></tr>
             </thead>
             <tbody>
-              {!net && <tr><td colSpan={4}>Searching the network<span className="mule-blink">…</span></td></tr>}
-              {net && models.length === 0 && (
-                <tr><td colSpan={4}>Nobody is sharing right now. <a className="mule-a" href="/docs#share">Be the first source</a>.</td></tr>
+              {!net && <tr><td colSpan={5}>Searching the network<span className="mule-blink">…</span></td></tr>}
+              {net && cards.length === 0 && anon.length === 0 && (
+                <tr><td colSpan={5}>Nobody is sharing right now. <a className="mule-a" href="/docs#share">Be the first source</a>.</td></tr>
               )}
-              {models.map((m) => (
-                <tr key={m.id}>
-                  <td><b>{m.id}</b></td>
-                  <td>{m.providers}</td>
-                  <td>{m.by.length ? m.by.join(', ') : 'anonymous'}</td>
-                  <td><code>"{m.id}"</code></td>
+              {cards.map((c) => (
+                <tr key={c.id} style={{ cursor: 'pointer' }} onClick={() => { window.location.href = cardHref(c); }}>
+                  <td>
+                    <a className="mule-a" href={cardHref(c)}><b>{c.title || c.model}</b></a>
+                    {c.title && <span className="mule-muted"> — <code>{c.model}</code></span>}
+                    {c.blurb && <div style={{ fontSize: 11, marginTop: 2 }}>{c.blurb}</div>}
+                  </td>
+                  <td>{c.nick}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <span className="mule-dot" style={{ background: c.online ? '#2e7d32' : '#9e9e9e' }} />{c.online ? 'online' : 'offline'}
+                  </td>
+                  <td>{c.likes || ''}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{c.tokPerSec ? '~' + c.tokPerSec + ' tok/s' : ''}</td>
+                </tr>
+              ))}
+              {anon.map((m) => (
+                <tr key={'anon-' + m.id}>
+                  <td><b>{m.id}</b></td><td>anonymous</td>
+                  <td><span className="mule-dot" style={{ background: '#2e7d32' }} />online</td><td></td><td></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p className="mule-p mule-muted" style={{ fontSize: 11 }}>
-          Sources = machines serving that model. Ask for <code>"auto"</code> to get whatever is best shared, or <code>"nick/model"</code> to pick someone's machine.
+          Every model has its own page: what it is, who made it, try it there. Call it as <code>"nick/model"</code>, or ask for <code>"auto"</code> to get the most shared one.
         </p>
       </div>
 

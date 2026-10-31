@@ -1,0 +1,22 @@
+{
+  "layout": "mule",
+  "meta": {
+    "title": "{{params.nick}}/{{params.model}} — LLMule",
+    "description": "{{params.model}}, shared by {{params.nick}} on LLMule — try it in the browser, or call it from any OpenAI-compatible app."
+  },
+  "components": [
+    {
+      "component": "./MuleModelCard",
+      "attributes": {
+        "nick": "{{params.nick}}",
+        "model": "{{params.model}}"
+      }
+    },
+    {
+      "component": "./MuleChatRoom",
+      "attributes": {
+        "lock": "{{params.nick}}/{{params.model}}"
+      }
+    }
+  ]
+}

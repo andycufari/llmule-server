@@ -32,6 +32,9 @@
       "origins": [
         "*"
       ]
+    },
+    "muleCard": {
+      "public": true
     }
   }
 }
