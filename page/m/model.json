@@ -11,12 +11,6 @@
         "nick": "{{params.nick}}",
         "model": "{{params.model}}"
       }
-    },
-    {
-      "component": "./MuleChatRoom",
-      "attributes": {
-        "lock": "{{params.nick}}/{{params.model}}"
-      }
     }
   ]
 }

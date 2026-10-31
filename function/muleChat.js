@@ -99,7 +99,7 @@ var resolveModel = async function(app, asked) {
 var pickProvider = async function(app, model, skip, ownerId) {
   var online = await onlineProviders(app);
   var withModel = online.filter(function(p) {
-    return (p.models || []).indexOf(model) !== -1 && skip.indexOf(idOf(p)) === -1 && (!ownerId || p.userId === ownerId);
+    return !p.goneMs && (p.models || []).indexOf(model) !== -1 && skip.indexOf(idOf(p)) === -1 && (!ownerId || p.userId === ownerId);
   });
   if (!withModel.length) return null;
   var open = await app.db.use('mule_jobs', true).query({}).in('status', ['queued', 'running']).limit(500);
@@ -157,6 +157,7 @@ async function muleChat(app) {
   }));
   var jobId = idOf(job);
   var reassignAt = start + REASSIGN_MS;
+  var checkGoneAt = start + 2000;
 
   while (Date.now() - start < WAIT_MS) {
     await app.sleep(400);
@@ -170,6 +171,20 @@ async function muleChat(app) {
       return json(app, out);
     }
     if (j.status === 'error') return fail(app, 502, 'The provider failed: ' + (j.error || 'unknown error'), 'provider_error');
+
+    // Its provider said goodbye (restart, stop) while holding the job: nobody will answer it — hand it to another
+    if ((j.status === 'running' || j.status === 'queued') && Date.now() > checkGoneAt) {
+      checkGoneAt = Date.now() + 2000;
+      var holder = plain(await app.db.use('mule_providers', true).getById(j.providerId));
+      if (!holder || holder.goneMs) {
+        var next = await pickProvider(app, model, tried, target.ownerId);
+        if (!next) return fail(app, 503, 'The machine serving "' + asked + '" just went offline. Try again in a moment', 'no_provider');
+        tried.push(idOf(next));
+        await jobs.update(jobId, { status: 'queued', providerId: idOf(next), providerUserId: next.userId, runningBy: '', startedMs: 0 });
+        reassignAt = Date.now() + REASSIGN_MS;
+        continue;
+      }
+    }
 
     if (j.status === 'queued' && Date.now() > reassignAt) {
       var other = await pickProvider(app, model, tried, target.ownerId);

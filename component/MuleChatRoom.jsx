@@ -40,6 +40,7 @@ const MuleChatRoom = (props) => {
   const [waited, setWaited] = useState(0);
   const [guest, setGuest] = useState(false);
   const endRef = useRef(null);
+  const boxRef = useRef(null);
 
   useEffect(() => {
     if (!lock) fetch('/api/muleNetwork').then((r) => r.json()).then((d) => setModels(d.models || [])).catch(() => {});
@@ -49,8 +50,10 @@ const MuleChatRoom = (props) => {
       .catch(() => {});
   }, []);
 
+  // Scroll the message box only — scrollIntoView would move the whole page (the chat sits under the model card)
   useEffect(() => {
-    if (endRef.current) endRef.current.scrollIntoView({ block: 'end' });
+    const box = boxRef.current;
+    if (box) box.scrollTop = box.scrollHeight;
   }, [msgs, busy]);
 
   useEffect(() => {
@@ -103,9 +106,9 @@ const MuleChatRoom = (props) => {
   return (
     <div>
       <style>{MD_CSS}</style>
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8, marginTop: lock ? 14 : 0 }}>
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
         {lock ? (
-          <b>Try it: <code>{lock}</code></b>
+          <span className="mule-muted" style={{ fontSize: 11 }}>Talking to <code>{lock}</code> on a volunteer's machine.</span>
         ) : (
           <>
             <label htmlFor="mule-model">Model:</label>
@@ -121,7 +124,7 @@ const MuleChatRoom = (props) => {
         <button className="mule-btn" onClick={() => setMsgs([])} disabled={busy || !msgs.length}><Trash2 size={13} /> Clear</button>
       </div>
 
-      <div className="mule-white" style={{ height: lock ? '44vh' : '56vh', minHeight: 280, overflowY: 'auto', padding: 10 }}>
+      <div ref={boxRef} className="mule-white" style={{ height: lock ? '52vh' : '56vh', minHeight: 280, overflowY: 'auto', padding: 10 }}>
         {msgs.length === 0 && (
           <div className="mule-muted" style={{ textAlign: 'center', marginTop: '18vh' }}>
             <p className="mule-p">Say something. A volunteer's machine will answer.</p>

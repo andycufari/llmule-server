@@ -1,0 +1,23 @@
+{
+  "id": "mule_feedback",
+  "name": "LLMule — Model feedback",
+  "description": "Comments on a model card (nick/model): what people who tried it tell whoever shares it. Plain text, shown as text (no markdown, no HTML).",
+  "type": "jason",
+  "schema": {
+    "ownerId":   { "type": "string", "required": true, "description": "mule_users row of whoever shares the model" },
+    "model":     { "type": "string", "required": true },
+    "userId":    { "type": "string", "required": true, "description": "Author (mule_users row)" },
+    "text":      { "type": "string", "required": true },
+    "createdMs": { "type": "number" }
+  },
+  "indexes": [
+    { "name": "card", "fields": { "ownerId": 1, "model": 1, "createdMs": -1 } },
+    { "name": "author", "fields": { "userId": 1, "createdMs": -1 } }
+  ],
+  "security": {
+    "read": "admin",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  }
+}

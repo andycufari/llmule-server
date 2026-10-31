@@ -9,6 +9,7 @@
     "name":       { "type": "string" },
     "models":     { "type": "array" },
     "lastSeenMs": { "type": "number" },
+    "goneMs":     { "type": "number", "description": "Set when the process said goodbye (stopping). Never offered jobs again" },
     "served":     { "type": "number", "default": 0 }
   },
   "indexes": [

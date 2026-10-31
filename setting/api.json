@@ -35,6 +35,9 @@
     },
     "muleCard": {
       "public": true
+    },
+    "muleFeedback": {
+      "public": true
     }
   }
 }
